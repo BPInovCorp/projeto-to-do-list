@@ -1,0 +1,38 @@
+export default {
+    app: {
+        brand: 'Inovcorp',
+        tagline: 'Gestor de Tarefas',
+        copyright: '© 2026 Bruno Pinto. Todos os direitos reservados.'
+    },
+    locale: {
+        label: 'Idioma',
+        pt_PT: 'Português',
+        en: 'Inglês',
+        switch_to_pt: 'Mudar idioma para Português',
+        switch_to_en: 'Mudar idioma para Inglês',
+    },
+    home: {
+        welcome_title: 'Organize as suas atividades diárias com eficiência',
+        welcome_subtitle: 'Uma ferramenta simples, rápida e intuitiva para gerir as suas tarefas e prioridades.',
+        status_badge: 'Sistema Operacional',
+    },
+    auth: {
+        login: 'Iniciar Sessão',
+        register: 'Criar Conta',
+        logout: 'Terminar Sessão',
+        name: 'Nome Completo',
+        name_placeholder: 'O seu nome',
+        email: 'Endereço de Email',
+        email_placeholder: 'exemplo@inovcorp.pt',
+        password: 'Palavra-passe',
+        password_placeholder: 'Mínimo 8 carateres',
+        password_confirmation: 'Confirmar Palavra-passe',
+        password_confirmation_placeholder: 'Repita a palavra-passe',
+        already_registered: 'Já tem uma conta? Iniciar sessão',
+        need_account: 'Não tem conta? Criar uma nova',
+        submit_login: 'Entrar',
+        submit_register: 'Registar',
+        submitting: 'A processar...',
+        authenticated_as: 'Sessão iniciada como',
+    },
+};
