@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\TarefaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,4 +17,7 @@ Route::post('/entrar', [AuthController::class, 'login'])->name('autenticacao.ent
 Route::middleware('auth')->group(function () {
     Route::post('/sair', [AuthController::class, 'logout'])->name('autenticacao.sair');
     Route::get('/utilizador', [AuthController::class, 'user'])->name('autenticacao.utilizador');
+
+    Route::get('/tarefas', [TarefaController::class, 'index'])->name('tarefas.index');
+    Route::post('/tarefas', [TarefaController::class, 'store'])->name('tarefas.guardar');
 });

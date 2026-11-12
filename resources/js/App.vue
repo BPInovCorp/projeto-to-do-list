@@ -5,6 +5,8 @@ import { useAuth } from './composables/useAuth';
 import LanguageSwitcher from './components/LanguageSwitcher.vue';
 import LoginForm from './components/auth/LoginForm.vue';
 import RegisterForm from './components/auth/RegisterForm.vue';
+import TarefaForm from './components/tasks/TarefaForm.vue';
+import TarefaLista from './components/tasks/TarefaLista.vue';
 
 const { t } = useI18n();
 const { user, isAuthenticated, checkAuth, logout } = useAuth();
@@ -65,15 +67,10 @@ onMounted(() => {
 
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
             <template v-if="isAuthenticated">
-                <section class="max-w-3xl mx-auto bg-white rounded-xl border border-slate-200 p-6 sm:p-10 shadow-xs text-center">
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
-                        {{ t('home.welcome_title') }}
-                    </h2>
-
-                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-                        {{ t('home.welcome_subtitle') }}
-                    </p>
-                </section>
+                <div class="max-w-4xl mx-auto">
+                    <TarefaForm />
+                    <TarefaLista />
+                </div>
             </template>
             <template v-else>
                 <LoginForm

@@ -27,6 +27,7 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'sucesso',
             'utilizador' => $utilizador,
+            'csrf_token' => csrf_token(),
         ], 201);
     }
 
@@ -64,6 +65,7 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'sucesso',
             'utilizador' => Auth::user(),
+            'csrf_token' => csrf_token(),
         ]);
     }
 
@@ -76,6 +78,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'sucesso',
+            'csrf_token' => csrf_token(),
         ]);
     }
 

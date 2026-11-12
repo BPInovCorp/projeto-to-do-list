@@ -5,6 +5,18 @@ const user = ref(null);
 const isLoading = ref(false);
 const isAuthenticated = computed(() => !!user.value);
 
+function atualizarCsrfToken(novoToken) {
+    if (novoToken) {
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = novoToken;
+        if (typeof document !== 'undefined') {
+            const meta = document.head.querySelector('meta[name="csrf-token"]');
+            if (meta) {
+                meta.content = novoToken;
+            }
+        }
+    }
+}
+
 export function useAuth() {
     async function checkAuth() {
         isLoading.value = true;
@@ -23,6 +35,7 @@ export function useAuth() {
         try {
             const response = await axios.post('/entrar', credentials);
             user.value = response.data.utilizador;
+            atualizarCsrfToken(response.data.csrf_token);
             return response.data;
         } finally {
             isLoading.value = false;
@@ -34,6 +47,7 @@ export function useAuth() {
         try {
             const response = await axios.post('/registo', data);
             user.value = response.data.utilizador;
+            atualizarCsrfToken(response.data.csrf_token);
             return response.data;
         } finally {
             isLoading.value = false;
@@ -43,8 +57,9 @@ export function useAuth() {
     async function logout() {
         isLoading.value = true;
         try {
-            await axios.post('/sair');
+            const response = await axios.post('/sair');
             user.value = null;
+            atualizarCsrfToken(response.data.csrf_token);
         } finally {
             isLoading.value = false;
         }
