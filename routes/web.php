@@ -20,4 +20,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/tarefas', [TarefaController::class, 'index'])->name('tarefas.index');
     Route::post('/tarefas', [TarefaController::class, 'store'])->name('tarefas.guardar');
+    Route::get('/tarefas/{tarefa}', [TarefaController::class, 'show'])->name('tarefas.detalhes');
+    Route::put('/tarefas/{tarefa}', [TarefaController::class, 'update'])->name('tarefas.atualizar');
+    Route::patch('/tarefas/{tarefa}/alternar', [TarefaController::class, 'toggle'])->name('tarefas.alternar');
+    Route::delete('/tarefas/{tarefa}', [TarefaController::class, 'destroy'])->name('tarefas.eliminar');
 });

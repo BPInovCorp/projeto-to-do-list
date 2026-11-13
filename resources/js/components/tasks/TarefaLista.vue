@@ -1,11 +1,47 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useTarefas } from '../../composables/useTarefas';
 import { useI18n } from '../../i18n';
 import TarefaItem from './TarefaItem.vue';
+import TarefaDetalhesModal from './TarefaDetalhesModal.vue';
+import TarefaEditarModal from './TarefaEditarModal.vue';
+import TarefaEliminarModal from './TarefaEliminarModal.vue';
 
 const { tarefas, carregando, listarTarefas } = useTarefas();
 const { t } = useI18n();
+
+const tarefaDetalhes = ref(null);
+const tarefaEditar = ref(null);
+const tarefaEliminar = ref(null);
+
+function abrirDetalhes(tarefa) {
+    fecharModais();
+    tarefaDetalhes.value = tarefa;
+}
+
+function abrirEditar(tarefa) {
+    fecharModais();
+    tarefaEditar.value = tarefa;
+}
+
+function abrirEliminar(tarefa) {
+    fecharModais();
+    tarefaEliminar.value = tarefa;
+}
+
+function abrirEditarDeDetalhes() {
+    const tarefa = tarefaDetalhes.value;
+    fecharModais();
+    if (tarefa) {
+        tarefaEditar.value = tarefa;
+    }
+}
+
+function fecharModais() {
+    tarefaDetalhes.value = null;
+    tarefaEditar.value = null;
+    tarefaEliminar.value = null;
+}
 
 onMounted(() => {
     listarTarefas();
@@ -68,7 +104,29 @@ onMounted(() => {
                 v-for="tarefa in tarefas"
                 :key="tarefa.id"
                 :tarefa="tarefa"
+                @detalhes="abrirDetalhes"
+                @editar="abrirEditar"
+                @eliminar="abrirEliminar"
             />
         </div>
+
+        <TarefaDetalhesModal
+            v-if="tarefaDetalhes"
+            :tarefa="tarefaDetalhes"
+            @fechar="tarefaDetalhes = null"
+            @editar="abrirEditarDeDetalhes"
+        />
+
+        <TarefaEditarModal
+            v-if="tarefaEditar"
+            :tarefa="tarefaEditar"
+            @fechar="tarefaEditar = null"
+        />
+
+        <TarefaEliminarModal
+            v-if="tarefaEliminar"
+            :tarefa="tarefaEliminar"
+            @fechar="tarefaEliminar = null"
+        />
     </section>
 </template>
