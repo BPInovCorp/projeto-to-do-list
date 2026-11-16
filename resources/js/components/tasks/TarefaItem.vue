@@ -47,7 +47,7 @@ const prioridadeConfig = computed(() => {
 
 function formatarData(dataStr) {
     if (!dataStr) return '';
-    const partes = dataStr.split('-');
+    const partes = dataStr.split('T')[0].split('-');
     if (partes.length === 3) {
         return `${partes[2]}/${partes[1]}/${partes[0]}`;
     }
@@ -57,8 +57,13 @@ function formatarData(dataStr) {
 
 <template>
     <article
+        tabindex="0"
+        role="button"
+        :aria-label="tarefa.titulo"
         @click="emit('detalhes', tarefa)"
-        class="group bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs transition-all hover:shadow-sm hover:border-slate-300 cursor-pointer"
+        @keydown.enter.self="emit('detalhes', tarefa)"
+        @keydown.space.self.prevent="emit('detalhes', tarefa)"
+        class="group bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs transition-all hover:shadow-sm hover:border-slate-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
         :class="{ 'opacity-75 bg-slate-50/60': isConcluida }"
     >
         <div class="flex items-start gap-3 sm:gap-4">
@@ -66,13 +71,17 @@ function formatarData(dataStr) {
                 type="button"
                 @click.stop="handleAlternar"
                 :disabled="isAlternando"
-                class="mt-1 w-5 h-5 rounded-md border flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 shrink-0 disabled:opacity-50"
-                :class="isConcluida ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-300 hover:border-indigo-500 bg-white'"
+                class="w-11 h-11 sm:w-8 sm:h-8 -m-2 sm:-m-1 rounded-lg flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 shrink-0 disabled:opacity-50"
                 :aria-label="isConcluida ? t('tasks.mark_as_pending') : t('tasks.mark_as_completed')"
             >
-                <svg v-if="isConcluida" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                </svg>
+                <span
+                    class="w-5 h-5 rounded-md border flex items-center justify-center transition-colors"
+                    :class="isConcluida ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-300 hover:border-indigo-500 bg-white'"
+                >
+                    <svg v-if="isConcluida" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </span>
             </button>
 
             <div class="flex-1 min-w-0">
@@ -123,11 +132,11 @@ function formatarData(dataStr) {
                 </p>
             </div>
 
-            <div class="flex items-center gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+            <div class="flex items-center gap-0.5 sm:gap-1 shrink-0 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity">
                 <button
                     type="button"
                     @click.stop="emit('editar', tarefa)"
-                    class="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="w-11 h-11 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
                     :aria-label="t('tasks.edit')"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -137,7 +146,7 @@ function formatarData(dataStr) {
                 <button
                     type="button"
                     @click.stop="emit('eliminar', tarefa)"
-                    class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    class="w-11 h-11 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
                     :aria-label="t('tasks.delete')"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

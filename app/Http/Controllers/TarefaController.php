@@ -15,10 +15,32 @@ class TarefaController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $tarefas = $request->user()->tarefas()->latest()->get();
+        $validated = $request->validate([
+            'estado' => ['nullable', 'string', 'in:todas,pendente,concluida'],
+            'prioridade' => ['nullable', 'string', 'in:todas,baixa,media,alta'],
+            'prazo' => ['nullable', 'string', 'in:todos,hoje,semana,vencidas,sem_data'],
+        ]);
+
+        $baseQuery = $request->user()->tarefas();
+        $hoje = today()->toDateString();
+
+        $contadores = [
+            'total' => (clone $baseQuery)->count(),
+            'pendentes' => (clone $baseQuery)->where('estado', EstadoTarefa::Pendente)->count(),
+            'concluidas' => (clone $baseQuery)->where('estado', EstadoTarefa::Concluida)->count(),
+            'vencidas' => (clone $baseQuery)->where('estado', EstadoTarefa::Pendente)->where('data_vencimento', '<', $hoje)->count(),
+        ];
+
+        $tarefas = (clone $baseQuery)
+            ->filtrarPorEstado($validated['estado'] ?? null)
+            ->filtrarPorPrioridade($validated['prioridade'] ?? null)
+            ->filtrarPorPrazo($validated['prazo'] ?? null)
+            ->latest()
+            ->get();
 
         return response()->json([
             'tarefas' => $tarefas,
+            'contadores' => $contadores,
         ]);
     }
 
